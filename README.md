@@ -9,7 +9,7 @@ Siheng Zhao, Yuanhang Zhang, Ziqi Lu, Pieter Abbeel, Rocky Duan, Koushil Sreenat
 
 ## News
 
-- LadderMan is officially released! The code will be available soon.
+- **2026-06-04.** LadderMan is officially released! The code will be available soon.
 
 ---
 
