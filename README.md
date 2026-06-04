@@ -1,15 +1,17 @@
-## My Project
+## LadderMan: Learning Humanoid Perceptive Ladder Climbing
 
-TODO: Fill this README out!
+Siheng Zhao, Yuanhang Zhang, Ziqi Lu, Pieter Abbeel, Rocky Duan, Koushil Sreenath, Yue Wang, C. Karen Liu†, Guanya Shi†
+*† Equal Advising · 2026*
 
-Be sure to:
+[**Website**](https://ladderman-robot.github.io/) · [**arXiv**]()
 
-* Change the title in this README
-* Edit your repository description on GitHub
+---
 
-## Security
+## News
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+- LadderMan is officially released! The code will be available soon.
+
+---
 
 ## License
 
