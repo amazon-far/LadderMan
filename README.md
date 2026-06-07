@@ -3,7 +3,9 @@
 Siheng Zhao, Yuanhang Zhang, Ziqi Lu, Pieter Abbeel, Rocky Duan, Koushil Sreenath, Yue Wang, C. Karen Liu†, Guanya Shi†
 *† Equal Advising · 2026*
 
-[**Website**](https://ladderman-robot.github.io/) · [**arXiv**]()
+[**Website**](https://ladderman-robot.github.io/) · [**arXiv**](https://arxiv.org/abs/2606.05873) · [**Video**](https://www.youtube.com/shorts/hAB1VmZhKW4)
+
+![Banner for LadderMan](./assets/teaser.png)
 
 ---
 
