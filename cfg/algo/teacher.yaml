@@ -1,0 +1,15 @@
+# @package algo
+# Step 1: privileged teacher (PPO). Defaults: active_adaptation/learning/ppo/ppo_teacher.py::TeacherConfig
+defaults:
+  - ppo_teacher
+  - _self_
+
+name: teacher
+max_iters: 7500        # 4096 envs x 32 steps x 7500 iterations ~= 1e9 frames
+vecnorm: eval          # observation statistics are frozen (loaded from `vecnorm_path`)
+
+lr: 3.0e-4
+desired_kl: 0.01
+entropy_coef_start: 0.001
+entropy_coef_end: 0.001
+init_noise_scale: 1.0

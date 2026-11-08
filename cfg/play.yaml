@@ -1,0 +1,30 @@
+hydra:
+  run:
+    dir: ./outputs_play/${now:%Y-%m-%d}/${now:%H-%M-%S}-${task.name}-${algo.name}
+  job:
+    chdir: true
+
+defaults:
+  - task: student
+  - algo: student
+  - _self_
+
+headless: false
+exp_name: ${task.name}-${algo.name}
+
+app:
+  headless: ${..headless}
+  enable_cameras: false
+
+seed: 0
+checkpoint_path: ???     # a local path, or run:<wandb_run_id>[:<iteration>]
+vecnorm_path: null       # null = use the statistics stored in the checkpoint
+vecnorm: eval
+export_policy: false     # export ONNX + deployment yaml to exports/<task.name>/
+max_steps: -1            # -1 = run until the window is closed
+
+wandb:
+  project: ladderman
+
+task:
+  num_envs: 4

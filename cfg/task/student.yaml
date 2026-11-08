@@ -1,0 +1,102 @@
+# @package task
+# Step 2: depth student, trained with multi-expert DAgger + PPO.
+# Every env is assigned one of the teachers' inclinations (round robin) and is labelled by that teacher.
+#   python scripts/train.py algo=student task=student algo.teacher_checkpoint_path_list=[...]
+defaults:
+  - base/ladder
+  - _self_
+
+name: LadderStudent
+
+observation:
+  # the student policy sees `command`, `policy` and `depth`; `object` and `priv` are only used by the
+  # teachers and the critic
+  depth:
+    warp_depth_camera:
+      camera_poses:
+        front_depth:
+          body_link: torso_link
+          offset: [0.0576235, 0.01753, 0.41987]
+          rotation_deg: [0.0, 47.6, 0.0]
+      horizontal_fov: 79.0
+      width: 80            # ray-casting resolution
+      height: 60
+      target_width: 80     # output resolution (nearest-neighbour downsampling if different)
+      target_height: 60
+      far_clip: 2.0
+      min_depth: 0.1
+      noise_std: 0.003
+      additional_noise_std: 0.002
+      episodic_noise_range: [-0.0, 0.0]
+      pixel_dropout_prob: 0.05
+      fov_randomization: {enable: true, min_fov_deg: 78.0, max_fov_deg: 80.0}
+      pose_randomization:
+        enable: true
+        offset_range: [[-0.01, 0.01], [-0.01, 0.01], [-0.01, 0.01]]   # m, camera mount offset noise (x, y, z in the body frame)
+        rotation_deg_range: [[-1.5, 1.5], [-2.0, 2.0], [-1.5, 1.5]]  # deg, roll / pitch / yaw
+      peripheral_depth_occlusion:
+        enable: false
+        mask_width_range: [0, 20]
+        depth_range: [0.1, 2.0]
+        apply_probability: 1.0
+      delay_range: [3, 4]
+      show: false
+      visualize_noised_depth: true
+      scene_meshes:
+        ladder:
+          shapes:
+            rung:
+              half_extents: [0.3, 0.04, 0.01905]
+              object_indices: [0, 1, 2, 3, 4, 5]
+            rail:
+              half_extents: [0.82, 0.06, 0.08]
+              object_indices: [6, 7]   # rungs are 0..num_rungs-1, then the two rails
+          shape_noise:
+            rung:
+              noise_std: 0.05
+              episodic_offset_range: [-0.05, 0.05]
+              reverse_mask: true
+              replace_noise: true    # replace the noised pixels with uniform random depth
+      dynamic_meshes:
+        enable: true
+        meshes_root: active_adaptation/assets/g1/meshes
+        body_meshes:
+          # Lower body
+          pelvis_contour_link.STL: pelvis
+          pelvis.STL: pelvis
+          left_hip_roll_link.STL: left_hip_roll_link
+          left_hip_yaw_link.STL: left_hip_yaw_link
+          left_knee_link.STL: left_knee_link
+          left_ankle_roll_link.STL: left_ankle_roll_link
+          right_hip_roll_link.STL: right_hip_roll_link
+          right_hip_yaw_link.STL: right_hip_yaw_link
+          right_knee_link.STL: right_knee_link
+          right_ankle_roll_link.STL: right_ankle_roll_link
+          # Upper body
+          left_shoulder_yaw_link.STL: left_shoulder_yaw_link
+          right_shoulder_yaw_link.STL: right_shoulder_yaw_link
+          left_elbow_link.STL: left_elbow_link
+          right_elbow_link.STL: right_elbow_link
+          left_wrist_roll_link.STL: left_wrist_roll_link
+          right_wrist_roll_link.STL: right_wrist_roll_link
+          left_wrist_pitch_link.STL: left_wrist_pitch_link
+          right_wrist_pitch_link.STL: right_wrist_pitch_link
+          left_wrist_yaw_link.STL: left_wrist_yaw_link
+          right_wrist_yaw_link.STL: right_wrist_yaw_link
+          # Hands: must put it at the last two links!
+          left_rubber_hand.STL: left_wrist_yaw_link
+          right_rubber_hand.STL: right_wrist_yaw_link
+
+randomization:
+  ladder_inclination_me_randomization:
+    # expert grid = inclination_deg_list x spacing_list (inclination-major order), one teacher per expert
+    inclination_deg_list: [60.0, 62.7, 65.5, 68.2]
+    spacing_list: null       # e.g. [0.22, 0.25, 0.28]; null = command.ladder_config.rung_spacing
+    assignment: round_robin
+    rung_spacing_noise: [-0.01, 0.01]
+    rung_offset_x_noise: [-0.02, 0.02]
+    rung_offset_z_noise: [-0.02, 0.02]
+    inclination_noise: [-0.75, 0.75]   # degrees
+    base_x_noise: [0.0, 0.0]
+    base_z_noise: [-0.01, 0.02]
+    enabled: true

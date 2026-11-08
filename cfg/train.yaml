@@ -1,0 +1,37 @@
+hydra:
+  run:
+    dir: ./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}-${task.name}-${algo.name}
+  job:
+    chdir: true
+
+defaults:
+  - task: teacher
+  - algo: teacher
+  - _self_
+
+headless: true
+exp_name: ${task.name}-${algo.name}
+
+app:
+  headless: ${..headless}
+  enable_cameras: ${..eval_render}
+
+max_iters: ${oc.select:algo.max_iters,-1}  # if <= 0, train for `total_frames`
+total_frames: 1_000_000_000
+save_interval: 300
+print_interval: 50     # print a short metric summary every N iterations
+eval_render: false
+seed: 0
+
+# initialize / resume from a checkpoint: a local path, or run:<wandb_run_id>[:<iteration>]
+checkpoint_path: null
+# observation normalization shared by all policies (see README); set to null and vecnorm=train to recompute
+vecnorm_path: data/vecnorm/ladder_vecnorm.pt
+vecnorm: ${oc.select:algo.vecnorm,eval}
+
+wandb:
+  project: ladderman
+  entity: null           # your W&B entity (null = default entity of the logged-in account)
+  mode: offline          # online | offline | disabled
+  tags: []
+  upload_checkpoints: true
