@@ -8,7 +8,7 @@ setup(
     packages=find_packages(include=["active_adaptation", "active_adaptation.*"]),
     python_requires=">=3.10",
     install_requires=[
-        "torch==2.7.0",
+        "torch==2.13.0",
         "torchrl==0.7.0",
         "tensordict==0.7.0",
         "hydra-core",
