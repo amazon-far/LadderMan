@@ -1,0 +1,31 @@
+from setuptools import find_packages, setup
+
+setup(
+    name="ladderman",
+    version="0.1.0",
+    description="LadderMan: Learning Humanoid Perceptive Ladder Climbing",
+    keywords=["robotics", "reinforcement learning", "humanoid"],
+    packages=find_packages(include=["active_adaptation", "active_adaptation.*"]),
+    python_requires=">=3.10",
+    install_requires=[
+        "torch==2.7.0",
+        "torchrl==0.7.0",
+        "tensordict==0.7.0",
+        "hydra-core",
+        "omegaconf",
+        "wandb",
+        "imageio",
+        "imageio-ffmpeg",
+        "termcolor",
+        "setproctitle",
+        "tqdm",
+        "scipy",
+        "pyyaml",
+        "trimesh",
+        "opencv-python",
+        "warp-lang==1.13.0",
+        "onnx",
+        "onnxscript==0.3.0",
+        "onnxruntime==1.22.0",
+    ],
+)

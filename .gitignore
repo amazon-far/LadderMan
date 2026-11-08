@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# environment created by setup.sh
+thirdparty/
+
+# training / evaluation outputs
+outputs/
+outputs_play/
+exports/
+wandb/
+asset_meta.json
+*.mp4
+checkpoint*.pt
+!data/**/*.pt
+
+# misc
+.vscode/
+.idea/
+*.log
+MUJOCO_LOG.TXT

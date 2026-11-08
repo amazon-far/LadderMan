@@ -1,0 +1,20 @@
+# @package task
+# Step 1: privileged teacher for ONE ladder inclination (train one teacher per inclination):
+#   python scripts/train.py algo=teacher task=teacher task.command.ladder_config.inclination_deg=60.0
+#   (optionally with a different rung spacing: task.command.ladder_config.rung_spacing=0.22)
+defaults:
+  - base/ladder
+  - _self_
+
+name: LadderTeacher-${task.command.ladder_config.inclination_deg}deg-${task.command.ladder_config.rung_spacing}m
+
+randomization:
+  # per-episode ladder geometry noise around `command.ladder_config`
+  ladder_geometry_randomization:
+    rung_spacing_noise: [-0.01, 0.01]
+    rung_offset_x_noise: [-0.02, 0.02]
+    rung_offset_z_noise: [-0.02, 0.02]
+    inclination_noise: [-0.75, 0.75]   # degrees
+    base_x_noise: [0.0, 0.0]
+    base_z_noise: [-0.01, 0.02]
+    enabled: true

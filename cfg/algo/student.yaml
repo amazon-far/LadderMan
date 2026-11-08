@@ -1,0 +1,36 @@
+# @package algo
+# Step 2: depth student, multi-expert DAgger + PPO in a single run.
+# Defaults: active_adaptation/learning/ppo/ppo_me_dagger.py::MEDaggerConfig
+defaults:
+  - ppo_me_dagger
+  - _self_
+
+name: student
+max_iters: 13000       # 7500 pure DAgger + 2500 mixed + 3000 pure PPO
+vecnorm: eval
+
+# One teacher checkpoint per expert of the task's grid
+#   task.randomization.ladder_inclination_me_randomization: inclination_deg_list x spacing_list,
+# in inclination-major order, e.g. [60, 65] x [0.22, 0.25] -> (60, 0.22), (60, 0.25), (65, 0.22), (65, 0.25).
+teacher_checkpoint_path_list: []
+# Optional: each teacher's (inclination, spacing), same order as the checkpoints. Empty = the task's grid.
+teacher_inclination_deg_list: []
+teacher_spacing_list: []
+
+# loss = lambda * bc_coef * BC + (1 - lambda) * PPO + value
+#   iterations [0, 7500):      lambda = 1             pure multi-expert DAgger (deterministic rollouts)
+#   iterations [7500, 10000):  lambda: 1 -> 0 linear  BC and PPO mixed
+#   iterations [10000, 13000): lambda = 0             pure PPO (teachers released)
+bc_coef: 1.0
+bc_hold_iters: 7500
+bc_decay_iters: 2500
+bc_epochs: 4                    # update epochs while lambda = 1 (PPO phases use ppo_epochs = 3)
+deterministic_bc_rollout: true  # student mean action while lambda = 1, sampled actions otherwise
+critic_warmup: true             # train the critic during the DAgger phase without affecting the policy
+bc_phase_strict_position: false # ladder-contact termination is relaxed while lambda = 1, task setting (true) afterwards
+
+lr: 3.0e-4             # constant while lambda > 0, KL-adaptive afterwards
+desired_kl: 0.01
+entropy_coef_start: 0.001
+entropy_coef_end: 0.001
+init_noise_scale: 0.5  # action std when PPO starts (it is not changed by BC)
